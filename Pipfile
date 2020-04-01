@@ -10,9 +10,10 @@ bpython = "*"
 pytest = "*"
 
 [packages]
-gino = "*"
+gino = "==0.8.6"
 aiohttp = "*"
 pyyaml = "*"
+ujson = "*"
 
 [requires]
 python_version = "3.7"
