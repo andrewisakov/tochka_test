@@ -1,9 +1,9 @@
 import uuid
 import ujson
 import decimal
+import datetime
 from aiohttp.web import json_response
 from models import User
-from schemas import schema_check
 
 
 async def ping(request):
@@ -151,7 +151,17 @@ async def status(request):
         code = 401
     response = ujson.dumps(response)
     return json_response(body=response, status=code)
-    
+
+
+async def refresh_users_hold():
+    users = await User.select('id', 'hold', 'account', 'status')\
+        .where(User.hold > 0).where(User.status).with_for_update().gino.all()
+    results = []
+    for user in users:
+        new_account = user.account - user.hold
+        result = await User.update.values(account=new_account, hold=0).where(User.id == user.id).gino.status()
+        results.append(result)
+
 
 def setup(app):
     app.router.add_get('/api/status/{id}', status)

@@ -6,4 +6,4 @@ dsn:
 
 api:
   port: 8080
-  
+  refresh_holds: 300
