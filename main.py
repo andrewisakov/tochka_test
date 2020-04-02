@@ -14,8 +14,6 @@ async def refresh_holds():
 async def main():
     await db.set_bind(BIND)
     await db.gino.create_all()
-    await create_init()
-    # await db.pop_bind().close()
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())

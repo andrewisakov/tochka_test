@@ -1,0 +1,75 @@
+version: "3.3"
+services:
+  tochka_postgres:
+    hostname: 
+      tochka_postgres
+    image: 
+      postgres:10
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    container_name:
+      tochka_postgres
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/tochka_test.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5434:5432
+
+  nginx_proxy:
+    image: jwilder/nginx-proxy
+    # build:
+    #   dockerfile: ./ngnix/dockerfile
+    volumes:
+      - /var/log:/tochka_test/ngnix/logs
+      - ./nginx/etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    container_name: nginx_proxy
+    hostname: nginx_proxy
+    restart: on-failure
+    ports:
+      - 80:80
+
+  tochka_app1:
+    build:
+      context: ./
+      dockerfile: ./dockerfile
+    volumes:
+      - /var/log:/tochka_test/logs1
+    container_name: tochka_app1
+    links:
+      - nginx_proxy
+      - tochka_postgres
+    depends_on:
+      # - nginx_proxy
+      - tochka_postgres
+    hostname: tochka_app1
+    restart: on-failure
+    environment:
+      - PYTHONASYNCIODEBUG=1 
+    ports:
+      - 8081:8080
+    command: >
+      pipenv run python main.py
+
+  tochka_app2:
+    build:
+      context: ./
+      dockerfile: ./dockerfile
+    volumes:
+      - /var/log:/tochka_test/logs2
+    container_name: tochka_app2
+    links:
+      - nginx_proxy
+      - tochka_postgres
+    depends_on:
+      # - nginx_proxy
+      - tochka_postgres
+    hostname: tochka_app2
+    restart: on-failure
+    environment:
+      - PYTHONASYNCIODEBUG=1 
+    ports:
+      - 8082:8080
+    command: >
+      pipenv run python main.py

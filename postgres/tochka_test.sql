@@ -17,6 +17,29 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: tochka_test; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE tochka_test WITH TEMPLATE = template0 ENCODING = 'UTF8';
+
+-- CREATE DATABASE tochka_test WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'ru_RU.UTF-8' LC_CTYPE = 'ru_RU.UTF-8';
+
+ALTER DATABASE tochka_test OWNER TO postgres;
+
+\connect tochka_test
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
@@ -56,8 +79,8 @@ ALTER TABLE public.users OWNER TO postgres;
 COPY public.users (id, name, account, hold, status) FROM stdin;
 26c940a1-7228-4ea2-a3bc-e6460b172040	Петров Иван Сергеевич	1700.00	300.00	t
 7badc8f8-65bc-449a-8cde-855234ac63e1	Kazitsky Jason	200.00	200.00	t
-5597cc3d-c948-48a0-b711-393edf20d9c0	Пархоменко Антон Александрович	10.00	300.00	t
 867f0924-a917-4711-939b-90b179a96392	Петечкин Петр Измаилович	1000000.00	1.00	f
+5597cc3d-c948-48a0-b711-393edf20d9c0	Пархоменко Антон Александрович	300.00	10.00	t
 \.
 
 

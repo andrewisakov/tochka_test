@@ -1,5 +1,5 @@
 dsn:
-  host: localhost
+  host: tochka_postgres
   user: postgres
   password: postgres
   database: tochka_test
