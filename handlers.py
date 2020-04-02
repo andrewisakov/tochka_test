@@ -155,7 +155,10 @@ async def status(request):
 
 async def refresh_users_hold():
     users = await User.select('id', 'hold', 'account', 'status')\
-        .where(User.hold > 0).where(User.status).with_for_update().gino.all()
+        .where(User.status)\
+        .where(User.hold > 0)\
+        .where(User.account >= User.hold)\
+        .with_for_update().gino.all()
     results = []
     for user in users:
         new_account = user.account - user.hold
